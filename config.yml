@@ -1,0 +1,9 @@
+stumc:
+  server: servername
+  database:
+    #Put in the correct values below to connect to your SQL database.
+    address: localhost
+    port: 3306
+    username: username
+    password: password
+    database: database
