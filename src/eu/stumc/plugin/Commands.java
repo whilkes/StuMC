@@ -36,6 +36,7 @@ public class Commands {
 	//flag k = kick, flag t = 7 day ban
 	@Command(aliases = {"punish", "p"}, desc = "Punish a player", usage = "<player> <reason>",
 			flags = "kt", min = 2, max = -1)
+	@CommandPermissions("stumc.staff")
 	public static void punishCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Player player = Bukkit.getPlayer(args.getString(0));
 		String reason = args.getJoinedStrings(1);
@@ -57,6 +58,7 @@ public class Commands {
 	
 	@Command(aliases = {"permaban", "pb"}, desc = "Permanently ban a player", usage = "<player> <reason>",
 			min = 2, max = -1)
+	@CommandPermissions("stumc.staff")
 	public static void permaBanCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Player player = Bukkit.getPlayer(args.getString(0));
 		String reason = args.getJoinedStrings(1);
@@ -97,6 +99,7 @@ public class Commands {
 	
 	@Command(aliases = "reports", desc = "View reports", usage = "[<page>]",
 			min = 0, max = 1)
+	@CommandPermissions("stumc.staff")
 	public static void reportsCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		if (args.argsLength() == 0)
 			Actions.getReports(sender, 0);
@@ -106,6 +109,7 @@ public class Commands {
 	
 	@Command(aliases = {"sch", "a", "mb"}, desc = "Staff chat", usage = "<message>",
 			min = 1, max = -1)
+	@CommandPermissions("stumc.staff")
 	public static void staffChatCommand(final CommandContext args, CommandSender sender) throws CommandException {
 		String message = args.getJoinedStrings(0);
 		Actions.sendStaffMessage(sender, message);
