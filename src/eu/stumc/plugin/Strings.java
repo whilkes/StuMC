@@ -44,19 +44,19 @@ public class Strings {
 	//punisher, punished, reason
 	public static final String WARN_BROADCAST = ChatColor.translateAlternateColorCodes('&',
 			"&6[&cS&6] &3$1 &6warned &3$2&6: &f$3");
-	//server, punisher, type, punished, reason
+	//punisher, type, punished, reason, server
 	public static final String PUNISHMENT_BROADCAST_OTHER_SERVER = ChatColor.translateAlternateColorCodes('&',
-			"&6[&c$1&6] &3$2 &e-> &6$3 &e-> &3$4 &e-> &6$5");
-	//server, punisher, punished, reason
+			"&6[&c$5&6] &3$1 &e-> &6$2 &e-> &3$3 &e-> &6$4");
+	//punisher, punished, reason, server
 	public static final String WARN_BROADCAST_OTHER_SERVER = ChatColor.translateAlternateColorCodes('&',
-			"&6[&cS&6] &6[&c$1&6] &3$2 &6warned &3$3&6: &f$4");
+			"&6[&cS&6] &6[&c$4&6] &3$1 &6warned &3$2&6: &f$3");
 	
 	//reporter, reported, reason
 	public static final String REPORT_BROADCAST = ChatColor.translateAlternateColorCodes('&',
 			"&6[&cR&6] &3$1 &6reported &3$2&6: &f$3");
-	//server, reporter, reported, reason
+	//reporter, reported, reason, server
 	public static final String REPORT_BROADCAST_OTHER_SERVER = ChatColor.translateAlternateColorCodes('&',
-			"&6[&cR&6] &6[&c$1&6] &3$2 &6reported &3$3&6: &f$4");
+			"&6[&cR&6] &6[&c$4&6] &3$1 &6reported &3$2&6: &f$3");
 	
 	public static final String SEEN_COMMAND_OFFLINE = ChatColor.translateAlternateColorCodes('&',
 			"&3$1 &6is currently &coffline&6, last seen on &c$2&6, on &c$3&6.");

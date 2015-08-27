@@ -62,9 +62,22 @@ public class Actions {
 				.replace("$3", reason));
 	}
 	
+	public static void broadcastReportFromOtherServer(UUID reporter, UUID reported, String reason, String server) {
+		String reporterDisplay = ChatColor.DARK_AQUA +
+				Bukkit.getOfflinePlayer(reporter).getName();
+		String reportedDisplay = ChatColor.DARK_AQUA +
+				Bukkit.getOfflinePlayer(reported).getName();
+		
+		sendStaffMessage(Strings.REPORT_BROADCAST_OTHER_SERVER
+				.replace("$1", reporterDisplay)
+				.replace("$2", reportedDisplay)
+				.replace("$3", reason)
+				.replace("$4", server));
+	}
+	
 	public static void getReports(CommandSender sender, int page) throws SQLException {
 		List<ReportData> reports = DatabaseOperations.getReports(page);
-		
+		sender.sendMessage(Strings.REPORTS_HEADER);
 		int i = 1;
 		for (ReportData reportData: reports) {
 			String server = reportData.getServer();
@@ -114,6 +127,7 @@ public class Actions {
 		for (Player player: Bukkit.getOnlinePlayers()) {
 			if (player.hasPermission("stumc.staff"))
 				player.sendMessage(message);
+			Bukkit.getLogger().info(message);
 		}
 	}
 	
@@ -122,12 +136,14 @@ public class Actions {
 			if (player.hasPermission("stumc.staff"))
 				player.sendMessage(message);
 		}
+		Bukkit.getLogger().info(message);
 	}
 	
 	public static void sendGlobalMessage(String message) {
 		for (Player player: Bukkit.getOnlinePlayers()) {
 			player.sendMessage(message);
 		}
+		Bukkit.getLogger().info(message);
 	}
 	
 	public static void getOnlineStaff(CommandSender sender) {

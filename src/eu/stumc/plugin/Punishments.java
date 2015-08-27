@@ -16,19 +16,25 @@ import org.bukkit.entity.Player;
 import eu.stumc.plugin.Data.PunishmentData;
 
 public class Punishments {
-	
-	public static void warn(CommandSender sender, OfflinePlayer target, String reason, boolean online) throws SQLException {
+
+	public static void warn(CommandSender sender, OfflinePlayer target,
+			String reason, boolean online) throws SQLException {
 		String punisherDisplay = "";
 		if (sender instanceof ConsoleCommandSender) {
-			DatabaseOperations.insertPunishment(UUID.fromString("00000000-0000-0000-0000-000000000000"),
-					target.getUniqueId(), "warn", reason, (System.currentTimeMillis() / 1000), 0);
+			DatabaseOperations.insertPunishment(
+					UUID.fromString("00000000-0000-0000-0000-000000000000"),
+					target.getUniqueId(), "warn", reason,
+					(System.currentTimeMillis() / 1000), 0);
 			punisherDisplay = ChatColor.GOLD + "(console)";
 		} else {
-			DatabaseOperations.insertPunishment(Bukkit.getPlayer(sender.getName()).getUniqueId(), target.getUniqueId(),
-					"warn", reason, (System.currentTimeMillis() / 1000), 0);
-			punisherDisplay = Bukkit.getPlayer(sender.getName()).getDisplayName();
+			DatabaseOperations.insertPunishment(
+					Bukkit.getPlayer(sender.getName()).getUniqueId(),
+					target.getUniqueId(), "warn", reason,
+					(System.currentTimeMillis() / 1000), 0);
+			punisherDisplay = Bukkit.getPlayer(sender.getName())
+					.getDisplayName();
 		}
-		
+
 		String punishedDisplay = "";
 		if (online) {
 			Player player = target.getPlayer();
@@ -41,23 +47,22 @@ public class Punishments {
 			player.playSound(player.getLocation(), Sound.WITHER_DEATH, 10, 1);
 		} else
 			punishedDisplay = ChatColor.DARK_AQUA + target.getName();
-		
+
 		broadcastPunishment(punisherDisplay, punishedDisplay, "warn", reason);
 	}
-	
+
 	/*
-	 * int type
-	 * 0 = auto-determine
-	 * 1 = kick
-	 * 2 = 7-day
-	 * 3 = perma
+	 * int type 0 = auto-determine 1 = kick 2 = 7-day 3 = perma
 	 */
-	public static void punish(CommandSender sender, OfflinePlayer target, String reason, boolean online, int type) throws SQLException {
+	public static void punish(CommandSender sender, OfflinePlayer target,
+			String reason, boolean online, int type) throws SQLException {
 		long expiry = 0;
 		if (type == 0) {
-			List<PunishmentData> punishments = DatabaseOperations.getPunishmentsByUuid(target.getUniqueId());
-			for (PunishmentData punishmentData: punishments) {
-				if ((punishmentData.getType().equals("tempban") || punishmentData.getType().equals("ban")))
+			List<PunishmentData> punishments = DatabaseOperations
+					.getPunishmentsByUuid(target.getUniqueId());
+			for (PunishmentData punishmentData : punishments) {
+				if ((punishmentData.getType().equals("tempban") || punishmentData
+						.getType().equals("ban")))
 					type = 3;
 				else if (punishmentData.getType().equals("kick") && type < 2)
 					type = 2;
@@ -67,23 +72,24 @@ public class Punishments {
 			if (type == 0)
 				type = 1;
 		}
-		
+
 		String punisherDisplay = "";
 		UUID uuid = null;
 		if (sender instanceof ConsoleCommandSender) {
 			punisherDisplay = ChatColor.GOLD + "(console)";
 			uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
 		} else {
-			punisherDisplay = Bukkit.getPlayer(sender.getName()).getDisplayName();
+			punisherDisplay = Bukkit.getPlayer(sender.getName())
+					.getDisplayName();
 			uuid = Bukkit.getPlayer(sender.getName()).getUniqueId();
 		}
-		
+
 		String punishedDisplay = "";
 		if (online)
 			punishedDisplay = target.getPlayer().getDisplayName();
 		else
 			punishedDisplay = ChatColor.DARK_AQUA + target.getName();
-		
+
 		String message = "";
 		String typeStr = "";
 		switch (type) {
@@ -93,8 +99,8 @@ public class Punishments {
 			break;
 		case 2:
 			expiry = System.currentTimeMillis() / 1000 + 604800;
-			message = Strings.TEMPBANNED.replace("$1", reason)
-										.replace("$2", new Date(expiry).toString());
+			message = Strings.TEMPBANNED.replace("$1", reason).replace("$2",
+					new Date(expiry).toString());
 			typeStr = "tempban";
 			break;
 		case 3:
@@ -102,64 +108,153 @@ public class Punishments {
 			typeStr = "ban";
 			break;
 		default:
-			sender.sendMessage(ChatColor.RED +
-					"Error occurred setting punishment type. See console.");
-			Bukkit.getLogger().severe("Error occurred setting punishment type: "
-					+ "Type: " + type + ", " + typeStr);
-			throw new RuntimeException("Error occurred setting punishment type: "
-					+ "Type: " + type + ", " + typeStr);
+			sender.sendMessage(ChatColor.RED
+					+ "Error occurred setting punishment type. See console.");
+			Bukkit.getLogger().severe(
+					"Error occurred setting punishment type: " + "Type: "
+							+ type + ", " + typeStr);
+			throw new RuntimeException(
+					"Error occurred setting punishment type: " + "Type: "
+							+ type + ", " + typeStr);
 		}
-		
+
 		if (online)
 			target.getPlayer().kickPlayer(message);
-		
-		DatabaseOperations.insertPunishment(uuid, target.getUniqueId(), typeStr, reason, System.currentTimeMillis() / 1000, expiry);
+
+		DatabaseOperations.insertPunishment(uuid, target.getUniqueId(),
+				typeStr, reason, System.currentTimeMillis() / 1000, expiry);
 		broadcastPunishment(punisherDisplay, punishedDisplay, typeStr, reason);
 	}
-	
-	public static void broadcastPunishment(String punisherDisplay, String punishedDisplay,
-			String type, String reason) {
+
+	public static void broadcastPunishment(String punisherDisplay,
+			String punishedDisplay, String type, String reason) {
 		String message = "";
 		switch (type) {
 		case "warn":
-			message = Strings.WARN_BROADCAST
-					.replace("$1", punisherDisplay)
-					.replace("$2", punishedDisplay)
-					.replace("$3", reason);
+			message = Strings.WARN_BROADCAST.replace("$1", punisherDisplay)
+					.replace("$2", punishedDisplay).replace("$3", reason);
 			Actions.sendStaffMessage(message);
 			break;
 		case "kick":
 			message = Strings.PUNISHMENT_BROADCAST
-			.replace("$1", punisherDisplay)
-			.replace("$2", "Kicked")
-			.replace("$3", punishedDisplay)
-			.replace("$4", reason);
+					.replace("$1", punisherDisplay).replace("$2", "Kicked")
+					.replace("$3", punishedDisplay).replace("$4", reason);
 			Actions.sendGlobalMessage(message);
 			break;
 		case "tempban":
 			message = Strings.PUNISHMENT_BROADCAST
-			.replace("$1", punisherDisplay)
-			.replace("$2", "7 day ban")
-			.replace("$3", punishedDisplay)
-			.replace("$4", reason);
+					.replace("$1", punisherDisplay).replace("$2", "7 day ban")
+					.replace("$3", punishedDisplay).replace("$4", reason);
 			Actions.sendGlobalMessage(message);
 			break;
 		case "ban":
 			message = Strings.PUNISHMENT_BROADCAST
-			.replace("$1", punisherDisplay)
-			.replace("$2", "Permanent ban")
-			.replace("$3", punishedDisplay)
-			.replace("$4", reason);
+					.replace("$1", punisherDisplay)
+					.replace("$2", "Permanent ban")
+					.replace("$3", punishedDisplay).replace("$4", reason);
 			Actions.sendGlobalMessage(message);
 			break;
 		default:
-			Actions.sendStaffMessage(ChatColor.RED +
-					"Error occurred handling punishment broadcast. See console.");
-			Bukkit.getLogger().severe("Error occurred handling punishment broadcast: "
-					+ "Unrecognised punishment type: " + type);
-			throw new RuntimeException("Error occurred handling punishment broadcast: "
-					+ "Unrecognised punishment type: " + type);
+			Actions.sendStaffMessage(ChatColor.RED
+					+ "Error occurred handling punishment broadcast. See console.");
+			Bukkit.getLogger().severe(
+					"Error occurred handling punishment broadcast: "
+							+ "Unrecognised punishment type: " + type);
+			throw new RuntimeException(
+					"Error occurred handling punishment broadcast: "
+							+ "Unrecognised punishment type: " + type);
 		}
 	}
+
+	public static void punishFromOtherServer(UUID punisher, UUID punished,
+			String reason, String server, String type, long expiry) {
+		OfflinePlayer punisherPlr = Bukkit.getOfflinePlayer(punisher);
+		String punisherDisplay = "";
+		if (punisherPlr.getPlayer() == null)
+			punisherDisplay = punisherPlr.getName();
+		else if (punisher.toString().equals(
+				"00000000-0000-0000-0000-000000000000"))
+			punisherDisplay = ChatColor.GOLD + "(console)";
+		else
+			punisherDisplay = punisherPlr.getPlayer().getDisplayName();
+
+		OfflinePlayer punishedPlr = Bukkit.getOfflinePlayer(punished);
+		String punishedDisplay = "";
+		if (punishedPlr.getPlayer() == null)
+			punishedDisplay = punishedPlr.getName();
+		else
+			punishedDisplay = punishedPlr.getPlayer().getDisplayName();
+
+		if (punishedPlr.getPlayer() != null) {
+			String message = "";
+			switch (type) {
+			case "kick":
+				message = Strings.KICKED.replace("$1", reason);
+				break;
+			case "tempban":
+				message = Strings.TEMPBANNED.replace("$1", reason).replace(
+						"$2", new Date(expiry).toString());
+				break;
+			case "ban":
+				message = Strings.PERMABANNED.replace("$1", reason);
+				break;
+			default:
+				Actions.sendStaffMessage(ChatColor.RED
+						+ "Error occurred handling punishment. See console.");
+				Bukkit.getLogger().severe(
+						"Error occurred handling punishment: "
+								+ "Unrecognised punishment type: " + type);
+				throw new RuntimeException(
+						"Error occurred handling punishment: "
+								+ "Unrecognised punishment type: " + type);
+			}
+			punishedPlr.getPlayer().kickPlayer(message);
+		}
+		broadcastPunishmentFromOtherServer(punisherDisplay, punishedDisplay, type, reason, server);
+	}
 	
+	public static void broadcastPunishmentFromOtherServer(String punisherDisplay,
+			String punishedDisplay, String type, String reason, String server) {
+		String message = "";
+		switch (type) {
+		case "warn":
+			message = Strings.WARN_BROADCAST_OTHER_SERVER.replace("$1", punisherDisplay)
+					.replace("$2", punishedDisplay).replace("$3", reason)
+					.replace("$4", server);
+			Actions.sendStaffMessage(message);
+			break;
+		case "kick":
+			message = Strings.PUNISHMENT_BROADCAST_OTHER_SERVER
+					.replace("$1", punisherDisplay).replace("$2", "Kicked")
+					.replace("$3", punishedDisplay).replace("$4", reason)
+					.replace("$5", server);
+			Actions.sendGlobalMessage(message);
+			break;
+		case "tempban":
+			message = Strings.PUNISHMENT_BROADCAST_OTHER_SERVER
+					.replace("$1", punisherDisplay).replace("$2", "7 day ban")
+					.replace("$3", punishedDisplay).replace("$4", reason)
+					.replace("$5", server);
+			Actions.sendGlobalMessage(message);
+			break;
+		case "ban":
+			message = Strings.PUNISHMENT_BROADCAST_OTHER_SERVER
+					.replace("$1", punisherDisplay)
+					.replace("$2", "Permanent ban")
+					.replace("$3", punishedDisplay).replace("$4", reason)
+					.replace("$5", server);
+			Actions.sendGlobalMessage(message);
+			break;
+		default:
+			Actions.sendStaffMessage(ChatColor.RED
+					+ "Error occurred handling punishment broadcast. See console.");
+			Bukkit.getLogger().severe(
+					"Error occurred handling punishment broadcast: "
+							+ "Unrecognised punishment type: " + type);
+			throw new RuntimeException(
+					"Error occurred handling punishment broadcast: "
+							+ "Unrecognised punishment type: " + type);
+		}
+	}
+
 }

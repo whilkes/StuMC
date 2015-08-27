@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -31,6 +33,8 @@ public class StuMC extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
+		BukkitTask getPunish;
+		BukkitTask getReports;
 		saveDefaultConfig();
 		openSqlConnection();
 		setupSqlDatabase();
@@ -40,6 +44,10 @@ public class StuMC extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new LoginEvent(), this);
 		getServer().getPluginManager().registerEvents(new JoinEvent(), this);
 		getServer().getPluginManager().registerEvents(new QuitEvent(), this);
+		if (getConfig().getBoolean("stumc.xserverpunishments"))
+			getPunish = new eu.stumc.plugin.threads.PunishThread().runTaskTimer(this, 20L, 200L);
+		if (getConfig().getBoolean("stumc.xserverreports"))
+			getReports = new eu.stumc.plugin.threads.ReportsThread().runTaskTimer(this, 20L, 200L);
 		getLogger().info("StuMC Plugin Enabled!");
 	}
 	
