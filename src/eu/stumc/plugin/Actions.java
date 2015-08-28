@@ -158,7 +158,7 @@ public class Actions {
 					staff.append(", ");
 			}
 		}
-		String staffList = staff.length() > 0 ? staff.substring(0, staff.length() - 1): "";
+		String staffList = staff.length() > 0 ? staff.substring(0, staff.length() - 2): "";
 		if (staff.length() == 0)
 			sender.sendMessage(ChatColor.GOLD + "No staff online.");
 		else
