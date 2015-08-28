@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import eu.stumc.plugin.Data.PunishmentData;
+import eu.stumc.plugin.data.PunishmentData;
 
 public class Punishments {
 

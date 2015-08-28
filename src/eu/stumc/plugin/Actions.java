@@ -12,8 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import eu.stumc.plugin.Data.PunishmentData;
-import eu.stumc.plugin.Data.ReportData;
+import eu.stumc.plugin.data.PunishmentData;
+import eu.stumc.plugin.data.ReportData;
 
 public class Actions {
 	
@@ -60,6 +60,8 @@ public class Actions {
 				.replace("$1", reporterDisplay)
 				.replace("$2", reportedDisplay)
 				.replace("$3", reason));
+		
+		sender.sendMessage(Strings.REPORT_SUBMITTED);
 	}
 	
 	public static void broadcastReportFromOtherServer(UUID reporter, UUID reported, String reason, String server) {

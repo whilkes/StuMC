@@ -57,6 +57,8 @@ public class Strings {
 	//reporter, reported, reason, server
 	public static final String REPORT_BROADCAST_OTHER_SERVER = ChatColor.translateAlternateColorCodes('&',
 			"&6[&cR&6] &6[&c$4&6] &3$1 &6reported &3$2&6: &f$3");
+	public static final String REPORT_SUBMITTED = ChatColor.translateAlternateColorCodes('&',
+			"&bThank you. Your report has been submitted.");
 	
 	public static final String SEEN_COMMAND_OFFLINE = ChatColor.translateAlternateColorCodes('&',
 			"&3$1 &6is currently &coffline&6, last seen on &c$2&6, on &c$3&6.");

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import eu.stumc.plugin.Data.PlayerData;
-import eu.stumc.plugin.Data.PunishmentData;
-import eu.stumc.plugin.Data.ReportData;
+import eu.stumc.plugin.data.PlayerData;
+import eu.stumc.plugin.data.PunishmentData;
+import eu.stumc.plugin.data.ReportData;
 
 public class DatabaseOperations {
 	

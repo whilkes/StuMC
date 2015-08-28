@@ -14,8 +14,8 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
 import eu.stumc.plugin.DatabaseOperations;
 import eu.stumc.plugin.Strings;
-import eu.stumc.plugin.Data.PlayerData;
-import eu.stumc.plugin.Data.PunishmentData;
+import eu.stumc.plugin.data.PlayerData;
+import eu.stumc.plugin.data.PunishmentData;
 
 public class LoginEvent implements Listener {
 

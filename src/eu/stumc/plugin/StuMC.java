@@ -28,7 +28,6 @@ public class StuMC extends JavaPlugin {
 	
 	public static Connection conn;
 	public static String serverName;
-	//public ConcurrentHashMap<UUID, PlayerData> players;
     private CommandsManager<CommandSender> commands;
 	
 	@Override
@@ -40,7 +39,6 @@ public class StuMC extends JavaPlugin {
 		setupSqlDatabase();
 		setupCommands();
 		serverName = getConfig().getString("stumc.server");
-		//players = new ConcurrentHashMap<UUID, PlayerData>();
 		getServer().getPluginManager().registerEvents(new LoginEvent(), this);
 		getServer().getPluginManager().registerEvents(new JoinEvent(), this);
 		getServer().getPluginManager().registerEvents(new QuitEvent(), this);
