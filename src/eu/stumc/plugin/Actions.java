@@ -36,8 +36,10 @@ public class Actions {
 			UUID punisherUuid = punishmentData.getPunisher();
 			if (punisherUuid.toString().equals("00000000-0000-0000-0000-000000000000"))
 				punisher = ChatColor.GOLD + "(console)";
-			else
+			else if (Bukkit.getPlayer(punisherUuid) == null)
 				punisher = Bukkit.getOfflinePlayer(punisherUuid).getName();
+			else
+				punisher = Bukkit.getPlayer(punisherUuid).getDisplayName();
 			String type = punishmentData.getType();
 			String reason = punishmentData.getReason();
 			sender.sendMessage(Strings.LIST_PUNISHMENT
