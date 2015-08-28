@@ -131,8 +131,8 @@ public class Actions {
 		for (Player player: Bukkit.getOnlinePlayers()) {
 			if (player.hasPermission("stumc.staff"))
 				player.sendMessage(message);
-			Bukkit.getLogger().info(message);
 		}
+		Bukkit.getLogger().info(message);
 	}
 	
 	public static void sendStaffMessage(String message) {
