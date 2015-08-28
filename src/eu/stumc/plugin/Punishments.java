@@ -170,8 +170,7 @@ public class Punishments {
 			String reason, String server, String type, long expiry) {
 		OfflinePlayer punisherPlr = Bukkit.getOfflinePlayer(punisher);
 		String punisherDisplay = "";
-		if (punisher.toString().equals(
-				"00000000-0000-0000-0000-000000000000"))
+		if (punisher.toString().equals("00000000-0000-0000-0000-000000000000"))
 			punisherDisplay = ChatColor.GOLD + "(console)";
 		else if (punisherPlr.getPlayer() == null)
 			punisherDisplay = punisherPlr.getName();
@@ -186,39 +185,52 @@ public class Punishments {
 			punishedDisplay = punishedPlr.getPlayer().getDisplayName();
 
 		if (punishedPlr.getPlayer() != null) {
-			String message = "";
-			switch (type) {
-			case "kick":
-				message = Strings.KICKED.replace("$1", reason);
-				break;
-			case "tempban":
-				message = Strings.TEMPBANNED.replace("$1", reason).replace(
-						"$2", new Date(expiry).toString());
-				break;
-			case "ban":
-				message = Strings.PERMABANNED.replace("$1", reason);
-				break;
-			default:
-				Actions.sendStaffMessage(ChatColor.RED
-						+ "Error occurred handling punishment. See console.");
-				Bukkit.getLogger().severe(
-						"Error occurred handling punishment: "
-								+ "Unrecognised punishment type: " + type);
-				throw new RuntimeException(
-						"Error occurred handling punishment: "
-								+ "Unrecognised punishment type: " + type);
+			if (!type.equals("warn")) {
+				String message = "";
+				switch (type) {
+				case "kick":
+					message = Strings.KICKED.replace("$1", reason);
+					break;
+				case "tempban":
+					message = Strings.TEMPBANNED.replace("$1", reason).replace(
+							"$2", new Date(expiry).toString());
+					break;
+				case "ban":
+					message = Strings.PERMABANNED.replace("$1", reason);
+					break;
+				default:
+					Actions.sendStaffMessage(ChatColor.RED
+							+ "Error occurred handling punishment. See console.");
+					Bukkit.getLogger().severe(
+							"Error occurred handling punishment: "
+									+ "Unrecognised punishment type: " + type);
+					throw new RuntimeException(
+							"Error occurred handling punishment: "
+									+ "Unrecognised punishment type: " + type);
+				}
+				punishedPlr.getPlayer().kickPlayer(message);
+			} else {
+				Player player = punishedPlr.getPlayer();
+				player.sendMessage(Strings.WARNED_TITLE);
+				player.sendMessage(Strings.WARNED_1.replace("$1", reason));
+				player.sendMessage(Strings.WARNED_2.replace("$1", reason));
+				player.sendMessage(Strings.WARNED_3.replace("$1", reason));
+				player.sendMessage(Strings.WARNED_TITLE);
+				player.playSound(player.getLocation(), Sound.WITHER_DEATH, 10, 1);
 			}
-			punishedPlr.getPlayer().kickPlayer(message);
 		}
-		broadcastPunishmentFromOtherServer(punisherDisplay, punishedDisplay, type, reason, server);
+		broadcastPunishmentFromOtherServer(punisherDisplay, punishedDisplay,
+				type, reason, server);
 	}
-	
-	public static void broadcastPunishmentFromOtherServer(String punisherDisplay,
-			String punishedDisplay, String type, String reason, String server) {
+
+	public static void broadcastPunishmentFromOtherServer(
+			String punisherDisplay, String punishedDisplay, String type,
+			String reason, String server) {
 		String message = "";
 		switch (type) {
 		case "warn":
-			message = Strings.WARN_BROADCAST_OTHER_SERVER.replace("$1", punisherDisplay)
+			message = Strings.WARN_BROADCAST_OTHER_SERVER
+					.replace("$1", punisherDisplay)
 					.replace("$2", punishedDisplay).replace("$3", reason)
 					.replace("$4", server);
 			Actions.sendStaffMessage(message);
