@@ -170,11 +170,11 @@ public class Punishments {
 			String reason, String server, String type, long expiry) {
 		OfflinePlayer punisherPlr = Bukkit.getOfflinePlayer(punisher);
 		String punisherDisplay = "";
-		if (punisherPlr.getPlayer() == null)
-			punisherDisplay = punisherPlr.getName();
-		else if (punisher.toString().equals(
+		if (punisher.toString().equals(
 				"00000000-0000-0000-0000-000000000000"))
 			punisherDisplay = ChatColor.GOLD + "(console)";
+		else if (punisherPlr.getPlayer() == null)
+			punisherDisplay = punisherPlr.getName();
 		else
 			punisherDisplay = punisherPlr.getPlayer().getDisplayName();
 
