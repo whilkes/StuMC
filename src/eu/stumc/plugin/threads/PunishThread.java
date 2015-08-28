@@ -30,8 +30,9 @@ public class PunishThread extends BukkitRunnable {
 			}
 			
 			PreparedStatement query = StuMC.conn.prepareStatement(
-					"SELECT * FROM stumc_punishments WHERE id > ?");
+					"SELECT * FROM stumc_punishments WHERE id > ? AND server != ?");
 			query.setInt(1, lastId);
+			query.setString(2, StuMC.serverName);
 			ResultSet result = query.executeQuery();
 			while (result.next()) {
 				UUID punisher = UUID.fromString(result.getString("punisher_uuid"));

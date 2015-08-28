@@ -30,8 +30,9 @@ public class ReportsThread extends BukkitRunnable {
 			}
 			
 			PreparedStatement query = StuMC.conn.prepareStatement(
-					"SELECT * FROM stumc_reports WHERE id > ?");
+					"SELECT * FROM stumc_reports WHERE id > ? AND server != ?");
 			query.setInt(1, lastId);
+			query.setString(2, StuMC.serverName);
 			ResultSet result = query.executeQuery();
 			while (result.next()) {
 				UUID reporter = UUID.fromString(result.getString("reporter_uuid"));
