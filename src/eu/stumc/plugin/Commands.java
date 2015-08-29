@@ -17,7 +17,7 @@ public class Commands {
 	
 	@Command(aliases = {"warn", "w"}, desc = "Warn a player", usage = "<player> <reason>",
 			min = 2, max = -1)
-	@CommandPermissions("stumc.staff")
+	@CommandPermissions("stumc.mod")
 	public static void warnCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Player player = Bukkit.getPlayer(args.getString(0));
 		String reason = args.getJoinedStrings(1);
@@ -28,15 +28,14 @@ public class Commands {
 				return;
 			}
 			Punishments.warn(sender, Bukkit.getOfflinePlayer(uuid), reason, false);
-		} else {
+		} else
 			Punishments.warn(sender, player, reason, true);
-		}
 	}
 	
 	//flag k = kick, flag t = 7 day ban
 	@Command(aliases = {"punish", "p"}, desc = "Punish a player", usage = "<player> <reason>",
 			flags = "kt", min = 2, max = -1)
-	@CommandPermissions("stumc.staff")
+	@CommandPermissions("stumc.mod")
 	public static void punishCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Player player = Bukkit.getPlayer(args.getString(0));
 		String reason = args.getJoinedStrings(1);
@@ -58,7 +57,7 @@ public class Commands {
 	
 	@Command(aliases = {"permaban", "pb"}, desc = "Permanently ban a player", usage = "<player> <reason>",
 			min = 2, max = -1)
-	@CommandPermissions("stumc.staff")
+	@CommandPermissions("stumc.mod")
 	public static void permaBanCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Player player = Bukkit.getPlayer(args.getString(0));
 		String reason = args.getJoinedStrings(1);
@@ -99,7 +98,7 @@ public class Commands {
 	
 	@Command(aliases = "reports", desc = "View reports", usage = "[<page>]",
 			min = 0, max = 1)
-	@CommandPermissions("stumc.staff")
+	@CommandPermissions("stumc.mod")
 	public static void reportsCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		if (args.argsLength() == 0)
 			Actions.getReports(sender, 0);
@@ -120,11 +119,18 @@ public class Commands {
 		Actions.getOnlineStaff(sender);
 	}
 	
-	/*@Command(aliases = {"seen", "find"}, desc = "See where a player is or when they were last online",
+	@Command(aliases = {"seen", "find"}, desc = "See where a player is or when they were last online",
 			min = 1, max = 1)
-	public static void seenCommand(final CommandContext args, CommandSender sender) throws CommandException {
-		String target = args.getString(0);
-		Actions.findPlayer(sender, target);
-	}*/
+	public static void seenCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
+		Player player = Bukkit.getPlayer(args.getString(0));
+		if (player == null) {
+			UUID uuid = DatabaseOperations.getUuidFromName(args.getString(0));
+			if (uuid == null)
+				sender.sendMessage(ChatColor.RED + "Player does not exist.");
+			else
+				Actions.findPlayer(sender, Bukkit.getOfflinePlayer(uuid), false);
+		} else
+			Actions.findPlayer(sender, player, true);
+	}
 	
 }

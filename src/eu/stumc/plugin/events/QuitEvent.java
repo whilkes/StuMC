@@ -18,10 +18,10 @@ public class QuitEvent implements Listener {
 	public void onLogin(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		Location location = event.getPlayer().getLocation();
-		int[] pos = { location.getBlockX(), location.getBlockY(), location.getBlockZ() };
 		try {
 			DatabaseOperations.setPlayerOfflineInDatabase(player.getUniqueId(),
-					pos[0], pos[1], pos[2]);
+					location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+					player.getWorld().getName());
 		} catch (SQLException e) {
 			Bukkit.getLogger().severe("Failed to query database: "+e);
 		}

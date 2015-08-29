@@ -7,11 +7,13 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import eu.stumc.plugin.data.PlayerData;
 import eu.stumc.plugin.data.PunishmentData;
 import eu.stumc.plugin.data.ReportData;
 
@@ -166,8 +168,55 @@ public class Actions {
 					staffList);
 	}
 	
-	/*public static void findPlayer(CommandSender sender, String target){
-		
-	}*/
+	public static void findPlayer(CommandSender sender, OfflinePlayer target, boolean online) throws SQLException {
+		if (online) {
+			Player player = target.getPlayer();
+			sender.sendMessage(Strings.SEEN_COMMAND_CURRENT
+					.replace("$1", player.getDisplayName()));
+			
+			if (sender instanceof ConsoleCommandSender
+					|| Bukkit.getPlayer(sender.getName()).hasPermission("stumc.mod")) {
+				Location location = player.getLocation();
+				sender.sendMessage(Strings.SEEN_COMMAND_POSITION
+						.replace("$1", player.getWorld().getName())
+						.replace("$2", Integer.toString(location.getBlockX()))
+						.replace("$3", Integer.toString(location.getBlockY()))
+						.replace("$4", Integer.toString(location.getBlockZ())));
+			}
+			
+			if (sender instanceof ConsoleCommandSender
+					|| Bukkit.getPlayer(sender.getName()).hasPermission("stumc.admin")) {
+				sender.sendMessage(Strings.SEEN_COMMAND_IP
+						.replace("$1", player.getAddress().getHostString()));
+			}
+		} else {
+			PlayerData playerData = DatabaseOperations.getPlayerDataByUuid(target.getUniqueId());
+			if (playerData.isOnline()) {
+				sender.sendMessage(Strings.SEEN_COMMAND_OTHER
+						.replace("$1", playerData.getName())
+						.replace("$2", playerData.getServer()));
+			} else {
+				sender.sendMessage(Strings.SEEN_COMMAND_OFFLINE
+						.replace("$1", playerData.getName())
+						.replace("$2", playerData.getServer())
+						.replace("$3", new Date(playerData.getTimestamp() * 1000).toString()));
+			}
+			
+			if (sender instanceof ConsoleCommandSender
+					|| Bukkit.getPlayer(sender.getName()).hasPermission("stumc.mod")) {
+				sender.sendMessage(Strings.SEEN_COMMAND_POSITION
+						.replace("$1", playerData.getWorld())
+						.replace("$2", Integer.toString(playerData.lastX()))
+						.replace("$3", Integer.toString(playerData.lastY()))
+						.replace("$4", Integer.toString(playerData.lastZ())));
+			}
+			
+			if (sender instanceof ConsoleCommandSender
+					|| Bukkit.getPlayer(sender.getName()).hasPermission("stumc.admin")) {
+				sender.sendMessage(Strings.SEEN_COMMAND_IP
+						.replace("$1", playerData.getIpAddress()));
+			}
+		}
+	}
 	
 }

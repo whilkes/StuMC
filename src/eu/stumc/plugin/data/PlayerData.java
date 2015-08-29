@@ -9,18 +9,22 @@ public class PlayerData {
 	private String ipAddress;
 	private String server;
 	private boolean isOnline;
+	private long timestamp;
+	private String world;
 	private int lastX;
 	private int lastY;
 	private int lastZ;
 	
 	public PlayerData(UUID uuid, String name, String ipAddress,
-			String server, boolean isOnline,
-			int lastX, int lastY, int lastZ) {
+			String server, boolean isOnline, long timestamp,
+			String world, int lastX, int lastY, int lastZ) {
 		this.uuid = uuid;
 		this.name = name;
 		this.ipAddress = ipAddress;
 		this.server = server;
 		this.isOnline = isOnline;
+		this.timestamp = timestamp;
+		this.world = world;
 		this.lastX = lastX;
 		this.lastY = lastY;
 		this.lastZ = lastZ;
@@ -44,6 +48,14 @@ public class PlayerData {
 	
 	public boolean isOnline() {
 		return isOnline;
+	}
+	
+	public long getTimestamp() {
+		return timestamp;
+	}
+	
+	public String getWorld() {
+		return world;
 	}
 	
 	public int lastX() {

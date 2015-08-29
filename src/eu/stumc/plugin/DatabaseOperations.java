@@ -12,7 +12,7 @@ import eu.stumc.plugin.data.PunishmentData;
 import eu.stumc.plugin.data.ReportData;
 
 public class DatabaseOperations {
-	
+
 	public static UUID getUuidFromName(String name) throws SQLException {
 		PreparedStatement query = null;
 		String queryString = "SELECT * FROM stumc_users WHERE username = ?";
@@ -36,6 +36,7 @@ public class DatabaseOperations {
 			data = new PlayerData(uuid, result.getString("username"),
 					result.getString("last_ip"), result.getString("server"),
 					Utils.intToBool(result.getInt("isOnline")),
+					result.getLong("timestamp"), result.getString("world"),
 					result.getInt("last_x"), result.getInt("last_y"),
 					result.getInt("last_z"));
 		}
@@ -54,7 +55,8 @@ public class DatabaseOperations {
 			data = new PlayerData(UUID.fromString(result.getString("uuid")),
 					result.getString("username"), result.getString("last_ip"),
 					result.getString("server"), Utils.intToBool(result
-							.getInt("isOnline")), result.getInt("last_x"),
+							.getInt("isOnline")), result.getLong("timestamp"),
+					result.getString("world"), result.getInt("last_x"),
 					result.getInt("last_y"), result.getInt("last_z"));
 		}
 		return data;
@@ -70,10 +72,10 @@ public class DatabaseOperations {
 		ResultSet result = query.executeQuery();
 		while (result.next()) {
 			punishments.add(new PunishmentData(result.getInt("id"), result
-					.getString("type"), result.getString("reason"),
-					UUID.fromString(result.getString("punisher_uuid")), 
-					result.getLong("timestamp"), result.getLong("expiry"),
-					result.getString("server")));
+					.getString("type"), result.getString("reason"), UUID
+					.fromString(result.getString("punisher_uuid")), result
+					.getLong("timestamp"), result.getLong("expiry"), result
+					.getString("server")));
 		}
 		return punishments;
 	}
@@ -89,10 +91,10 @@ public class DatabaseOperations {
 		ResultSet result = query.executeQuery();
 		while (result.next()) {
 			punishments.add(new PunishmentData(result.getInt("id"), result
-					.getString("type"), result.getString("reason"),
-					UUID.fromString(result.getString("punisher_uuid")), 
-					result.getLong("timestamp"), result.getLong("expiry"),
-					result.getString("server")));
+					.getString("type"), result.getString("reason"), UUID
+					.fromString(result.getString("punisher_uuid")), result
+					.getLong("timestamp"), result.getLong("expiry"), result
+					.getString("server")));
 		}
 		return punishments;
 	}
@@ -101,7 +103,10 @@ public class DatabaseOperations {
 			String ipAddress) throws SQLException {
 		PreparedStatement query = null;
 		String queryString = "INSERT INTO stumc_users (uuid, username, last_ip, server, isOnline, last_x, last_y, last_z, timestamp) "
-				+ "VALUES (?, ?, ?, '" + StuMC.serverName + "', 1, 0, 0, 0, " + System.currentTimeMillis() / 1000 + ")";
+				+ "VALUES (?, ?, ?, '"
+				+ StuMC.serverName
+				+ "', 1, 0, 0, 0, "
+				+ System.currentTimeMillis() / 1000 + ")";
 		query = StuMC.conn.prepareStatement(queryString);
 		query.setString(1, uuid.toString());
 		query.setString(2, name);
@@ -123,7 +128,8 @@ public class DatabaseOperations {
 			throws SQLException {
 		PreparedStatement query = null;
 		String queryString = "UPDATE stumc_users SET isOnline = 1, server = '"
-				+ StuMC.serverName + "', last_ip = ?, timestamp = ? WHERE uuid = ?";
+				+ StuMC.serverName
+				+ "', last_ip = ?, timestamp = ? WHERE uuid = ?";
 		query = StuMC.conn.prepareStatement(queryString);
 		query.setString(1, ipAddress);
 		query.setLong(2, System.currentTimeMillis() / 1000);
@@ -132,22 +138,24 @@ public class DatabaseOperations {
 	}
 
 	public static void setPlayerOfflineInDatabase(UUID uuid, int last_x,
-			int last_y, int last_z) throws SQLException {
+			int last_y, int last_z, String world) throws SQLException {
 		PreparedStatement query = null;
 		String queryString = "UPDATE stumc_users SET isOnline = 0, server = '"
 				+ StuMC.serverName
-				+ "', last_x = ?, last_z = ?, last_y = ?, timestamp = ? WHERE uuid = ?";
+				+ "', last_x = ?, last_z = ?, last_y = ?, timestamp = ?, world = ? WHERE uuid = ?";
 		query = StuMC.conn.prepareStatement(queryString);
 		query.setInt(1, last_x);
 		query.setInt(2, last_y);
 		query.setInt(3, last_z);
 		query.setLong(4, System.currentTimeMillis() / 1000);
-		query.setString(5, uuid.toString());
+		query.setString(5, world);
+		query.setString(6, uuid.toString());
 		query.executeUpdate();
 	}
 
-	public static void insertPunishment(UUID uuid, UUID punishedUuid, String type, String reason,
-			long timestamp, long expiry) throws SQLException {
+	public static void insertPunishment(UUID uuid, UUID punishedUuid,
+			String type, String reason, long timestamp, long expiry)
+			throws SQLException {
 		PreparedStatement query = null;
 		String queryString = "INSERT INTO stumc_punishments (punisher_uuid, punished_uuid, "
 				+ "type, reason, timestamp, expiry, active, server) "
@@ -167,7 +175,8 @@ public class DatabaseOperations {
 		PreparedStatement query = null;
 		String queryString = "INSERT INTO stumc_reports (reporter_uuid, reported_uuid, "
 				+ "reason, timestamp, server) "
-				+ "VALUES (?, ?, ?, ?, '" + StuMC.serverName + "')";
+				+ "VALUES (?, ?, ?, ?, '"
+				+ StuMC.serverName + "')";
 		query = StuMC.conn.prepareStatement(queryString);
 		query.setString(1, uuid.toString());
 		query.setString(2, target.toString());
@@ -182,12 +191,14 @@ public class DatabaseOperations {
 		int start = 0;
 		if (page > 0)
 			start = (page - 1) * 15;
-		String queryString = "SELECT * FROM stumc_reports ORDER BY timestamp DESC LIMIT " + start + ", 15";
+		String queryString = "SELECT * FROM stumc_reports ORDER BY timestamp DESC LIMIT "
+				+ start + ", 15";
 		query = StuMC.conn.prepareStatement(queryString);
 		ResultSet result = query.executeQuery();
 		while (result.next()) {
-			reports.add(new ReportData(UUID.fromString(result.getString("reporter_uuid")),
-					UUID.fromString(result.getString("reported_uuid")), result.getString("reason"),
+			reports.add(new ReportData(UUID.fromString(result
+					.getString("reporter_uuid")), UUID.fromString(result
+					.getString("reported_uuid")), result.getString("reason"),
 					result.getLong("timestamp"), result.getString("server")));
 		}
 		return reports;

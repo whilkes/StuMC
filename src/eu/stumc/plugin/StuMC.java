@@ -28,7 +28,7 @@ public class StuMC extends JavaPlugin {
 	
 	public static Connection conn;
 	public static String serverName;
-    private CommandsManager<CommandSender> commands;
+	private CommandsManager<CommandSender> commands;
 	
 	@Override
 	public void onEnable() {

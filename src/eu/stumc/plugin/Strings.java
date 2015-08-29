@@ -60,6 +60,7 @@ public class Strings {
 	public static final String REPORT_SUBMITTED = ChatColor.translateAlternateColorCodes('&',
 			"&bThank you. Your report has been submitted.");
 	
+	//user, server, date
 	public static final String SEEN_COMMAND_OFFLINE = ChatColor.translateAlternateColorCodes('&',
 			"&3$1 &6is currently &coffline&6, last seen on &c$2&6, on &c$3&6.");
 	public static final String SEEN_COMMAND_OTHER = ChatColor.translateAlternateColorCodes('&',
@@ -68,8 +69,9 @@ public class Strings {
 			"&3$1 &6is currently &aonline&6.");
 	public static final String SEEN_COMMAND_IP = ChatColor.translateAlternateColorCodes('&',
 			"&6IP address: &f$1");
+	//world, x, y, z
 	public static final String SEEN_COMMAND_POSITION = ChatColor.translateAlternateColorCodes('&',
-			"&6Position: &f($1, $2, $3");
+			"&6Position: &f($1, $2, $3, $4)");
 	
 	//punisher, type, reason
 	public static final String LIST_PUNISHMENT = ChatColor.translateAlternateColorCodes('&',
