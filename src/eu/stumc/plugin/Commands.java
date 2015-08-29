@@ -120,7 +120,7 @@ public class Commands {
 	}
 	
 	@Command(aliases = {"seen", "find"}, desc = "See where a player is or when they were last online",
-			min = 1, max = 1)
+			usage = "<player>", min = 1, max = 1)
 	public static void seenCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Player player = Bukkit.getPlayer(args.getString(0));
 		if (player == null) {
