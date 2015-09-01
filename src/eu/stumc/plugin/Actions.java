@@ -202,8 +202,9 @@ public class Actions {
 						.replace("$3", new Date(playerData.getTimestamp() * 1000).toString()));
 			}
 			
-			if (sender instanceof ConsoleCommandSender
-					|| Bukkit.getPlayer(sender.getName()).hasPermission("stumc.mod")) {
+			if ((sender instanceof ConsoleCommandSender
+					|| Bukkit.getPlayer(sender.getName()).hasPermission("stumc.mod"))
+					&& !playerData.isOnline()) {
 				sender.sendMessage(Strings.SEEN_COMMAND_POSITION
 						.replace("$1", playerData.getWorld())
 						.replace("$2", Integer.toString(playerData.lastX()))
