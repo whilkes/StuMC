@@ -40,7 +40,7 @@ public class StuMC extends JavaPlugin {
 		setupCommands();
 		serverName = getConfig().getString("stumc.server");
 		getServer().getPluginManager().registerEvents(new LoginEvent(), this);
-		getServer().getPluginManager().registerEvents(new JoinEvent(), this);
+		getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
 		getServer().getPluginManager().registerEvents(new QuitEvent(), this);
 		if (getConfig().getBoolean("stumc.xserverpunishments"))
 			getPunish = new eu.stumc.plugin.threads.PunishThread().runTaskTimer(this, 20L, 200L);
