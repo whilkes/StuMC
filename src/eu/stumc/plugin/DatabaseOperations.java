@@ -142,7 +142,7 @@ public class DatabaseOperations {
 		PreparedStatement query = null;
 		String queryString = "UPDATE stumc_users SET isOnline = 0, server = '"
 				+ StuMC.serverName
-				+ "', last_x = ?, last_z = ?, last_y = ?, timestamp = ?, world = ? WHERE uuid = ?";
+				+ "', last_x = ?, last_y = ?, last_z = ?, timestamp = ?, world = ? WHERE uuid = ?";
 		query = StuMC.conn.prepareStatement(queryString);
 		query.setInt(1, last_x);
 		query.setInt(2, last_y);
