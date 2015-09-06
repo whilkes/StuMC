@@ -72,6 +72,7 @@ public class StuMC extends JavaPlugin {
 		Properties connectionProps = new Properties();
 		connectionProps.put("user", getConfig().getString("stumc.database.username"));
 		connectionProps.put("password", getConfig().getString("stumc.database.password"));
+		connectionProps.put("autoReconnect", "true");
 		conn = DriverManager.getConnection(addr, connectionProps);
 		getLogger().info("Connected to database");
 	}

@@ -117,7 +117,7 @@ public class DatabaseOperations {
 	public static void updateNameInDatabase(UUID uuid, String name)
 			throws SQLException {
 		PreparedStatement query = null;
-		String queryString = "UPDATE stumc_users SET name = ? WHERE uuid = ?";
+		String queryString = "UPDATE stumc_users SET username = ? WHERE uuid = ?";
 		query = StuMC.conn.prepareStatement(queryString);
 		query.setString(1, name);
 		query.setString(2, uuid.toString());
