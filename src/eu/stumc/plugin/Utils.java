@@ -6,4 +6,8 @@ public class Utils {
 		return i != 0;
 	}
 	
+	public static int boolToInt(boolean b) {
+		return b ? 1 : 0;
+	}
+	
 }

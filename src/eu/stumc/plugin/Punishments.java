@@ -24,13 +24,13 @@ public class Punishments {
 			DatabaseOperations.insertPunishment(
 					UUID.fromString("00000000-0000-0000-0000-000000000000"),
 					target.getUniqueId(), "warn", reason,
-					(System.currentTimeMillis() / 1000), 0);
+					(System.currentTimeMillis() / 1000), 0, online);
 			punisherDisplay = ChatColor.GOLD + "(console)";
 		} else {
 			DatabaseOperations.insertPunishment(
 					Bukkit.getPlayer(sender.getName()).getUniqueId(),
 					target.getUniqueId(), "warn", reason,
-					(System.currentTimeMillis() / 1000), 0);
+					(System.currentTimeMillis() / 1000), 0, online);
 			punisherDisplay = Bukkit.getPlayer(sender.getName())
 					.getDisplayName();
 		}
@@ -122,7 +122,7 @@ public class Punishments {
 			target.getPlayer().kickPlayer(message);
 
 		DatabaseOperations.insertPunishment(uuid, target.getUniqueId(),
-				typeStr, reason, System.currentTimeMillis() / 1000, expiry);
+				typeStr, reason, System.currentTimeMillis() / 1000, expiry, (typeStr.equals("kick") ? online : true));
 		broadcastPunishment(punisherDisplay, punishedDisplay, typeStr, reason);
 	}
 

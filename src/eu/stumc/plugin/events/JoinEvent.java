@@ -10,8 +10,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import eu.stumc.plugin.DatabaseOperations;
+import eu.stumc.plugin.threads.IssueUnservedPunishment;
 
 public class JoinEvent implements Listener {
 	
@@ -24,10 +26,11 @@ public class JoinEvent implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onLogin(PlayerJoinEvent event) {
+	public void onLogin(PlayerJoinEvent event) throws SQLException {
 		Player player = event.getPlayer();
 		uuid = player.getUniqueId();
 		address = player.getAddress().getHostString();
+		BukkitTask task = new IssueUnservedPunishment(player).runTaskLater(plugin, 20L);
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -38,6 +41,6 @@ public class JoinEvent implements Listener {
 					e.printStackTrace();
 				}
 			}
-		}.runTaskLater(plugin, 20);
+		}.runTaskLater(plugin, 20L);
 	}
 }

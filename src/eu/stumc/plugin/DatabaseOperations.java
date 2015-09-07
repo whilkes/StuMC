@@ -154,12 +154,13 @@ public class DatabaseOperations {
 	}
 
 	public static void insertPunishment(UUID uuid, UUID punishedUuid,
-			String type, String reason, long timestamp, long expiry)
+			String type, String reason, long timestamp, long expiry,
+			boolean served)
 			throws SQLException {
 		PreparedStatement query = null;
 		String queryString = "INSERT INTO stumc_punishments (punisher_uuid, punished_uuid, "
-				+ "type, reason, timestamp, expiry, active, server) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, '1', '" + StuMC.serverName + "')";
+				+ "type, reason, timestamp, expiry, active, server, served) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, '1', '" + StuMC.serverName + "', ?)";
 		query = StuMC.conn.prepareStatement(queryString);
 		query.setString(1, uuid.toString());
 		query.setString(2, punishedUuid.toString());
@@ -167,6 +168,7 @@ public class DatabaseOperations {
 		query.setString(4, reason);
 		query.setLong(5, timestamp);
 		query.setLong(6, expiry);
+		query.setInt(7, Utils.boolToInt(served));
 		query.executeUpdate();
 	}
 
@@ -202,6 +204,31 @@ public class DatabaseOperations {
 					result.getLong("timestamp"), result.getString("server")));
 		}
 		return reports;
+	}
+	
+	public static PunishmentData getFirstUnservedPunishment(UUID uuid) throws SQLException {
+		PreparedStatement query = null;
+		PunishmentData punishment = null;
+		String queryString = "SELECT * FROM stumc_punishments WHERE punished_uuid = ? AND served = 0 LIMIT 1";
+		query = StuMC.conn.prepareStatement(queryString);
+		query.setString(1, uuid.toString());
+		ResultSet result = query.executeQuery();
+		while (result.next()) {
+			punishment = new PunishmentData(result.getInt("id"), result
+					.getString("type"), result.getString("reason"), UUID
+					.fromString(result.getString("punisher_uuid")), result
+					.getLong("timestamp"), result.getLong("expiry"), result
+					.getString("server"));
+		}
+		return punishment;
+	}
+	
+	public static void setPunishmentServed(int punishmentId) throws SQLException {
+		PreparedStatement query = null;
+		String queryString = "UPDATE stumc_punishments SET served = 1 WHERE id = ? AND active = 1";
+		query = StuMC.conn.prepareStatement(queryString);
+		query.setInt(1, punishmentId);
+		query.executeUpdate();
 	}
 
 }
