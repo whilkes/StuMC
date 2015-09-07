@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.sk89q.minecraft.util.commands.Command;
@@ -133,4 +135,17 @@ public class Commands {
 			Actions.findPlayer(sender, player, true);
 	}
 	
+	@Command(aliases = {"spectate"}, desc = "Toggle spectator gamemode", min = 0, max = 0)
+	@CommandPermissions("stumc.mod")
+	public static void spectateCommand(final CommandContext args, CommandSender sender) throws CommandException {
+		if (sender instanceof ConsoleCommandSender) {
+			sender.sendMessage(ChatColor.RED + "This command can only be run by players.");
+			return;
+		}
+		Player player = Bukkit.getPlayer(sender.getName());
+		if (player.getGameMode() == GameMode.SPECTATOR)
+			player.setGameMode(GameMode.SURVIVAL);
+		else
+			player.setGameMode(GameMode.SPECTATOR);
+	}
 }
