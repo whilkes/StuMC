@@ -43,7 +43,8 @@ public class PunishThread extends BukkitRunnable {
 				long expiry = result.getLong("expiry") * 1000;
 				lastId = result.getInt("id");
 				
-				Punishments.punishFromOtherServer(punisher, punished, reason, server, type, expiry);
+				Punishments.punishFromOtherServer(punisher, punished, reason, server, type, expiry,
+						result.getInt("id"));
 			}
 		} catch (SQLException e) {
 			Bukkit.getLogger().severe("Error occurred executing query: " + e);

@@ -167,7 +167,7 @@ public class Punishments {
 	}
 
 	public static void punishFromOtherServer(UUID punisher, UUID punished,
-			String reason, String server, String type, long expiry) {
+			String reason, String server, String type, long expiry, int id) throws SQLException {
 		OfflinePlayer punisherPlr = Bukkit.getOfflinePlayer(punisher);
 		String punisherDisplay = "";
 		if (punisher.toString().equals("00000000-0000-0000-0000-000000000000"))
@@ -218,6 +218,7 @@ public class Punishments {
 				player.sendMessage(Strings.WARNED_TITLE);
 				player.playSound(player.getLocation(), Sound.WITHER_DEATH, 10, 1);
 			}
+			DatabaseOperations.setPunishmentServed(id);
 		}
 		broadcastPunishmentFromOtherServer(punisherDisplay, punishedDisplay,
 				type, reason, server);
