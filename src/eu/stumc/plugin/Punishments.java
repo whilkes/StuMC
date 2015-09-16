@@ -113,7 +113,7 @@ public class Punishments {
 			Bukkit.getLogger().severe(
 					"Error occurred setting punishment type: " + "Type: "
 							+ type + ", " + typeStr);
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"Error occurred setting punishment type: " + "Type: "
 							+ type + ", " + typeStr);
 		}
@@ -160,7 +160,7 @@ public class Punishments {
 			Bukkit.getLogger().severe(
 					"Error occurred handling punishment broadcast: "
 							+ "Unrecognised punishment type: " + type);
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"Error occurred handling punishment broadcast: "
 							+ "Unrecognised punishment type: " + type);
 		}
@@ -204,7 +204,7 @@ public class Punishments {
 					Bukkit.getLogger().severe(
 							"Error occurred handling punishment: "
 									+ "Unrecognised punishment type: " + type);
-					throw new RuntimeException(
+					throw new IllegalArgumentException(
 							"Error occurred handling punishment: "
 									+ "Unrecognised punishment type: " + type);
 				}
@@ -264,7 +264,7 @@ public class Punishments {
 			Bukkit.getLogger().severe(
 					"Error occurred handling punishment broadcast: "
 							+ "Unrecognised punishment type: " + type);
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"Error occurred handling punishment broadcast: "
 							+ "Unrecognised punishment type: " + type);
 		}
