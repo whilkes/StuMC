@@ -95,7 +95,12 @@ public class Commands {
 	public static void reportCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Player target = Bukkit.getPlayer(args.getString(0));
 		String reason = args.getJoinedStrings(1);
-		Actions.report(Bukkit.getPlayer(sender.getName()), target, reason);
+		if (sender instanceof ConsoleCommandSender)
+			sender.sendMessage(ChatColor.RED + "Command cannot be run from console.");
+		else if (target == null)
+			sender.sendMessage(ChatColor.RED + "Player does not exist.");
+		else
+			Actions.report(Bukkit.getPlayer(sender.getName()), target, reason);
 	}
 	
 	@Command(aliases = "reports", desc = "View reports", usage = "[<page>]",
