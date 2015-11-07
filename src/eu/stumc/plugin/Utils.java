@@ -10,4 +10,8 @@ public class Utils {
 		return b ? 1 : 0;
 	}
 	
+	public static String calculateDaysDifference(long timestamp) {
+		return Long.toString(((timestamp - System.currentTimeMillis()) / 86400000) + 1);
+	}
+	
 }

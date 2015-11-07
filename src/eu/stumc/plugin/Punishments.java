@@ -221,12 +221,12 @@ public class Punishments {
 			DatabaseOperations.setPunishmentServed(id);
 		}
 		broadcastPunishmentFromOtherServer(punisherDisplay, punishedDisplay,
-				type, reason, server);
+				type, reason, server, expiry);
 	}
 
 	public static void broadcastPunishmentFromOtherServer(
 			String punisherDisplay, String punishedDisplay, String type,
-			String reason, String server) {
+			String reason, String server, long expiry) {
 		String message = "";
 		switch (type) {
 		case "warn":
@@ -244,8 +244,9 @@ public class Punishments {
 			Actions.sendGlobalMessage(message);
 			break;
 		case "tempban":
+			String length = Utils.calculateDaysDifference(expiry) + " day ban";
 			message = Strings.PUNISHMENT_BROADCAST_OTHER_SERVER
-					.replace("$1", punisherDisplay).replace("$2", "7 day ban")
+					.replace("$1", punisherDisplay).replace("$2", length)
 					.replace("$3", punishedDisplay).replace("$4", reason)
 					.replace("$5", server);
 			Actions.sendGlobalMessage(message);
