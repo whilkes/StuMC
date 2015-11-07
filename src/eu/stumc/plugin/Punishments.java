@@ -46,7 +46,7 @@ public class Punishments {
 			player.sendMessage(Strings.WARNED_TITLE);
 			player.playSound(player.getLocation(), Sound.WITHER_DEATH, 10, 1);
 		} else
-			punishedDisplay = ChatColor.DARK_AQUA + target.getName();
+			punishedDisplay = ChatColor.DARK_AQUA + DatabaseOperations.getNameFromUuid(target.getUniqueId());
 
 		broadcastPunishment(punisherDisplay, punishedDisplay, "warn", reason);
 	}
@@ -88,7 +88,7 @@ public class Punishments {
 		if (online)
 			punishedDisplay = target.getPlayer().getDisplayName();
 		else
-			punishedDisplay = ChatColor.DARK_AQUA + target.getName();
+			punishedDisplay = ChatColor.DARK_AQUA + DatabaseOperations.getNameFromUuid(target.getUniqueId());
 
 		String message = "";
 		String typeStr = "";
@@ -173,14 +173,14 @@ public class Punishments {
 		if (punisher.toString().equals("00000000-0000-0000-0000-000000000000"))
 			punisherDisplay = ChatColor.GOLD + "(console)";
 		else if (punisherPlr.getPlayer() == null)
-			punisherDisplay = punisherPlr.getName();
+			punisherDisplay = DatabaseOperations.getNameFromUuid(punisher);
 		else
 			punisherDisplay = punisherPlr.getPlayer().getDisplayName();
 
 		OfflinePlayer punishedPlr = Bukkit.getOfflinePlayer(punished);
 		String punishedDisplay = "";
 		if (punishedPlr.getPlayer() == null)
-			punishedDisplay = punishedPlr.getName();
+			punishedDisplay = DatabaseOperations.getNameFromUuid(punished);
 		else
 			punishedDisplay = punishedPlr.getPlayer().getDisplayName();
 

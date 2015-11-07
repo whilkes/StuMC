@@ -26,7 +26,7 @@ public class Actions {
 		if (target.isOnline())
 			playerDisplay = target.getPlayer().getDisplayName();
 		else
-			playerDisplay = ChatColor.DARK_AQUA + target.getName();
+			playerDisplay = ChatColor.DARK_AQUA + DatabaseOperations.getNameFromUuid(target.getUniqueId());
 		
 		if (punishments.isEmpty())
 			sender.sendMessage(Strings.NO_PUNISHMENTS_HEADER.replace("$1", playerDisplay));
@@ -39,7 +39,7 @@ public class Actions {
 			if (punisherUuid.toString().equals("00000000-0000-0000-0000-000000000000"))
 				punisher = ChatColor.GOLD + "(console)";
 			else if (Bukkit.getPlayer(punisherUuid) == null)
-				punisher = Bukkit.getOfflinePlayer(punisherUuid).getName();
+				punisher = DatabaseOperations.getNameFromUuid(punisherUuid);
 			else
 				punisher = Bukkit.getPlayer(punisherUuid).getDisplayName();
 			String type = punishmentData.getType();
@@ -68,11 +68,11 @@ public class Actions {
 		sender.sendMessage(Strings.REPORT_SUBMITTED);
 	}
 	
-	public static void broadcastReportFromOtherServer(UUID reporter, UUID reported, String reason, String server) {
+	public static void broadcastReportFromOtherServer(UUID reporter, UUID reported, String reason, String server) throws SQLException {
 		String reporterDisplay = ChatColor.DARK_AQUA +
-				Bukkit.getOfflinePlayer(reporter).getName();
+				DatabaseOperations.getNameFromUuid(reporter);
 		String reportedDisplay = ChatColor.DARK_AQUA +
-				Bukkit.getOfflinePlayer(reported).getName();
+				DatabaseOperations.getNameFromUuid(reported);
 		
 		sendStaffMessage(Strings.REPORT_BROADCAST_OTHER_SERVER
 				.replace("$1", reporterDisplay)
@@ -95,12 +95,12 @@ public class Actions {
 			String reporterDisplay = "";
 			String reportedDisplay = "";
 			if (Bukkit.getPlayer(reporter) == null)
-				reporterDisplay = Bukkit.getOfflinePlayer(reporter).getName();
+				reporterDisplay = DatabaseOperations.getNameFromUuid(reporter);
 			else
 				reporterDisplay = Bukkit.getPlayer(reporter).getDisplayName();
 			
 			if (Bukkit.getPlayer(reported) == null)
-				reportedDisplay = Bukkit.getOfflinePlayer(reported).getName();
+				reportedDisplay = DatabaseOperations.getNameFromUuid(reported);
 			else
 				reportedDisplay = Bukkit.getPlayer(reported).getDisplayName();
 			

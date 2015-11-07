@@ -24,6 +24,18 @@ public class DatabaseOperations {
 		}
 		return null;
 	}
+	
+	public static String getNameFromUuid(UUID uuid) throws SQLException {
+		PreparedStatement query = null;
+		String queryString = "SELECT * FROM stumc_users WHERE uuid = ?";
+		query = StuMC.conn.prepareStatement(queryString);
+		query.setString(1, uuid.toString());
+		ResultSet result = query.executeQuery();
+		while (result.next()) {
+			return result.getString("username");
+		}
+		return null;
+	}
 
 	public static PlayerData getPlayerDataByUuid(UUID uuid) throws SQLException {
 		PreparedStatement query = null;
