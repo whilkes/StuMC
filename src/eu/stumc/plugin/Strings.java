@@ -96,4 +96,9 @@ public class Strings {
 			"Failed to connect to the server: A database error occurred.\n"
 			+ "For assistance, please contact https://www.stumc.eu/support/";
 	
+	public static final String STAFF_LIST_HEADER = ChatColor.translateAlternateColorCodes('&',
+			"&b- - - - &6Online staff &b- - - -");
+	public static final String STAFF_LIST_SERVER = ChatColor.translateAlternateColorCodes('&',
+			"&6[&c$1&6] ");
+	
 }

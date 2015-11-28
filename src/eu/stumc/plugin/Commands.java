@@ -122,7 +122,7 @@ public class Commands {
 	}
 	
 	@Command(aliases = "staff", desc = "See online staff")
-	public static void staffCommand(final CommandContext args, CommandSender sender) throws CommandException {
+	public static void staffCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		Actions.getOnlineStaff(sender);
 	}
 	

@@ -1,6 +1,7 @@
 package eu.stumc.plugin;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -152,8 +153,35 @@ public class Actions {
 		Bukkit.getLogger().info(message);
 	}
 	
-	public static void getOnlineStaff(CommandSender sender) {
-		StringBuilder staff = new StringBuilder();
+	public static void getOnlineStaff(CommandSender sender) throws SQLException {
+		ArrayList<ArrayList<String>> staff = DatabaseOperations.getOnlineStaff();
+		if (staff.size() == 0) 
+			sender.sendMessage(ChatColor.GOLD + "No staff online.");
+		else {
+			sender.sendMessage(Strings.STAFF_LIST_HEADER);
+			for (int i = 0; i < staff.size(); i++) {
+				ArrayList<String> list = staff.get(i);
+				String server = list.get(0);
+				StringBuilder serverStaff = new StringBuilder();
+				serverStaff.append(Strings.STAFF_LIST_SERVER
+							.replace("$1", server));
+				
+				for (int n = 1; n < list.size(); n++) {
+					if (Bukkit.getPlayer(list.get(n)) != null) {
+						serverStaff.append(Bukkit.getPlayer(list.get(n)).getDisplayName());
+						serverStaff.append(", ");
+					} else {
+						serverStaff.append(ChatColor.DARK_AQUA + list.get(n));
+						serverStaff.append(", ");
+					}
+				}
+				
+				String staffList = serverStaff.length() > 0 ? serverStaff.substring(0, serverStaff.length() - 2): "";
+				sender.sendMessage(staffList);
+			}
+		}
+		
+		/*StringBuilder staff = new StringBuilder();
 		for (Player player: Bukkit.getOnlinePlayers()) {
 			if (player.hasPermission("stumc.staff")) {
 					staff.append(player.getDisplayName());
@@ -165,7 +193,7 @@ public class Actions {
 			sender.sendMessage(ChatColor.GOLD + "No staff online.");
 		else
 			sender.sendMessage(ChatColor.GOLD + "Online staff: " +
-					staffList);
+					staffList);*/
 	}
 	
 	public static void findPlayer(CommandSender sender, OfflinePlayer target, boolean online) throws SQLException {

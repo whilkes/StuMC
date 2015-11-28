@@ -242,5 +242,35 @@ public class DatabaseOperations {
 		query.setInt(1, punishmentId);
 		query.executeUpdate();
 	}
+	
+	public static ArrayList<ArrayList<String>> getOnlineStaff() throws SQLException {
+		ArrayList<ArrayList<String>> staff = new ArrayList<ArrayList<String>>();
+		PreparedStatement query = null;
+		String queryString = "SELECT * FROM stumc_users WHERE isStaff = 1 AND isOnline = 1";
+		query = StuMC.conn.prepareStatement(queryString);
+		ResultSet result = query.executeQuery();
+		while (result.next()) {
+			int i = 0;
+			boolean added = false;
+			while (!added) {
+				try {
+					staff.get(i);
+					if (staff.get(i).get(0).equals(result.getString("server"))) {
+						staff.get(i).add(result.getString("username"));
+						added = true;
+					} else {
+						i++;
+					}
+				} catch (IndexOutOfBoundsException e) {
+					staff.add(new ArrayList<String>());
+					staff.get(i).add(result.getString("server"));
+					staff.get(i).add(result.getString("username"));
+					added = true;
+				}
+			}
+		}
+		
+		return staff;
+	}
 
 }
