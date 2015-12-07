@@ -272,5 +272,15 @@ public class DatabaseOperations {
 		
 		return staff;
 	}
+	
+	public static void sendGlobalStaffMessage(UUID uuid, String message) throws SQLException {
+		PreparedStatement query = null;
+		String queryString = "INSERT INTO stumc_staffchat (uuid, message, server) "
+				+ "VALUES (?, ?, '" + StuMC.serverName + "')";
+		query = StuMC.conn.prepareStatement(queryString);
+		query.setString(1, uuid.toString());
+		query.setString(2, message);
+		query.executeUpdate();
+	}
 
 }

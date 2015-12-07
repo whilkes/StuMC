@@ -114,11 +114,12 @@ public class Commands {
 	}
 	
 	@Command(aliases = {"sch", "a", "mb"}, desc = "Staff chat", usage = "<message>",
-			min = 1, max = -1)
+			flags = "g", min = 1, max = -1)
 	@CommandPermissions("stumc.staff")
-	public static void staffChatCommand(final CommandContext args, CommandSender sender) throws CommandException {
+	public static void staffChatCommand(final CommandContext args, CommandSender sender) throws CommandException, SQLException {
 		String message = args.getJoinedStrings(0);
-		Actions.sendStaffMessage(sender, message);
+		boolean global = args.hasFlag('g');
+		Actions.sendStaffMessage(sender, message, global);
 	}
 	
 	@Command(aliases = "staff", desc = "See online staff")

@@ -1,5 +1,9 @@
 stumc:
   server: servername
+  #Enable/disable cross-server punishments, staff chat and reports.
+  xserverpunishments: true
+  xserverreports: true
+  xserverstaffchat: false
   database:
     #Put in the correct values below to connect to your SQL database.
     address: localhost

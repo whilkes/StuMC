@@ -118,24 +118,32 @@ public class Actions {
 		}
 	}
 	
-	public static void sendStaffMessage(CommandSender sender, String input) {
+	public static void sendStaffMessage(CommandSender sender, String input, boolean global) throws SQLException {
 		String message = "";
+		UUID uuid = null;
 		
-		if (sender instanceof ConsoleCommandSender)
+		if (sender instanceof ConsoleCommandSender) {
 			message = Strings.STAFF_CHAT
 			.replace("$1", ChatColor.translateAlternateColorCodes('&',
 					"&6(console)"))
 			.replace("$2", input);
-		else
+			uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
+		} else {
+			Player player = Bukkit.getPlayer(sender.getName());
 			message = Strings.STAFF_CHAT
-			.replace("$1", Bukkit.getPlayer(sender.getName()).getDisplayName())
+			.replace("$1", player.getDisplayName())
 			.replace("$2", input);
+			uuid = player.getUniqueId();
+		}
 		
 		for (Player player: Bukkit.getOnlinePlayers()) {
 			if (player.hasPermission("stumc.staff"))
 				player.sendMessage(message);
 		}
 		Bukkit.getLogger().info(message);
+		
+		if (global)
+			DatabaseOperations.sendGlobalStaffMessage(uuid, input);
 	}
 	
 	public static void sendStaffMessage(String message) {

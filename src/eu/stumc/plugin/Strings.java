@@ -88,9 +88,11 @@ public class Strings {
 	public static final String LIST_REPORT = ChatColor.translateAlternateColorCodes('&',
 			"&b[$1] [$2] &3$3 &6reported &3$4&6: &f$5");
 	
-	//user, message
+	//user, message, server
 	public static final String STAFF_CHAT = ChatColor.translateAlternateColorCodes('&',
 			"&6[&cS&6] &3$1&6: &f$2");
+	public static final String STAFF_CHAT_OTHER_SERVER = ChatColor.translateAlternateColorCodes('&',
+			"&6[&cS&6] &6[&c$3&6] &3$1&6: &f$2");
 	
 	public static final String CONNECT_FAIL_DATABASE_ERROR = ChatColor.RED +
 			"Failed to connect to the server: A database error occurred.\n"

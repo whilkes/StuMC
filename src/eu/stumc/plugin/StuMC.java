@@ -34,6 +34,7 @@ public class StuMC extends JavaPlugin {
 	public void onEnable() {
 		BukkitTask getPunish;
 		BukkitTask getReports;
+		BukkitTask getStaffChat;
 		saveDefaultConfig();
 		openSqlConnection();
 		setupSqlDatabase();
@@ -46,6 +47,8 @@ public class StuMC extends JavaPlugin {
 			getPunish = new eu.stumc.plugin.threads.PunishThread().runTaskTimer(this, 20L, 200L);
 		if (getConfig().getBoolean("stumc.xserverreports"))
 			getReports = new eu.stumc.plugin.threads.ReportsThread().runTaskTimer(this, 20L, 200L);
+		if (getConfig().getBoolean("stumc.xserverstaffchat"))
+			getStaffChat = new eu.stumc.plugin.threads.StaffChatThread().runTaskTimer(this, 20L, 200L);
 		getLogger().info("StuMC Plugin Enabled!");
 	}
 	
